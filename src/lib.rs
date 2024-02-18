@@ -1,7 +1,7 @@
 
 #![allow(dead_code)]
 
-struct U8RingBuffer {
+pub struct U8RingBuffer {
     ring: Vec<u8>,
     buffer: Vec<u8>,
     len: usize,
@@ -38,10 +38,12 @@ impl U8RingBuffer {
         if self.len == capacity { self.pos }
         else {
             let diff = self.pos as isize - self.len as isize;
-            if diff > 0 { diff as usize }
-            else if diff == 0 { 0 }
+            if diff >= 0 { diff as usize }
             else { (capacity as isize + diff) as usize }
         }
+    }
+    pub fn clear(&mut self) {
+        self.len = 0;
     }
 
     pub fn push(&mut self, mut buffer: &[u8]) {
