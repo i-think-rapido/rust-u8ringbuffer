@@ -44,6 +44,7 @@ impl U8RingBuffer {
     }
     pub fn clear(&mut self) {
         self.len = 0;
+        self.pos = 0;
     }
 
     pub fn push(&mut self, mut buffer: &[u8]) {
@@ -296,5 +297,19 @@ mod tests {
             ,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230
         ]);
         assert_eq!(buffer.purge(100), false);
+    }
+
+    #[test]
+    fn test_clean() {
+        let mut buffer = U8RingBuffer::new(5);
+        buffer.push(&[1,2,3]);
+        buffer.clear();
+        buffer.push(&[4,5,6]);
+        assert_eq!(buffer.slice(), &[4, 5, 6]);
+        buffer.push(&[7, 8, 9]);
+        assert_eq!(buffer.slice(), &[5, 6, 7, 8, 9]);
+        buffer.clear();
+        buffer.push(&[4,5,6]);
+        assert_eq!(buffer.slice(), &[4, 5, 6]);
     }
 }
